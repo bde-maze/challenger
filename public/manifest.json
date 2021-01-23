@@ -1,0 +1,9 @@
+{
+  "name": "Challenger",
+  "short_name": "Challenger",
+  "theme_color": "#ee2493",
+  "background_color": "#ffffff",
+  "display": "browser",
+  "scope": "/",
+  "start_url": "/"
+}
