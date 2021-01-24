@@ -1,5 +1,6 @@
 import { React, useState } from 'react'
 import EmptyState from '../components/EmptyState.js'
+import CreateChallengeForm from '../components/CreateChallengeForm.js'
 
 const challengeModel = {
   title: '',
@@ -37,9 +38,12 @@ const Challenge = ({ challenge, index, challenges, setChallenges }) => {
   }
 
   return (
-    <div>
-      {challenge.title} - {challenge.total}/{challenge.goal} (
-      {((challenge.total / challenge.goal) * 100).toFixed(2)}%){' '}
+    <div className="flex justify-between">
+      <div>{challenge.title}</div>
+      <div>
+        {challenge.total}/{challenge.goal} (
+        {((challenge.total / challenge.goal) * 100).toFixed(2)}%)
+      </div>
       <form onSubmit={(e) => onSubmit(e)}>
         <input
           type="number"
@@ -53,30 +57,35 @@ const Challenge = ({ challenge, index, challenges, setChallenges }) => {
 
 const ChallengeList = ({ challenges, setChallenges }) => {
   return (
-    <div>
+    <>
       {challenges &&
         challenges.map((challenge, index) => (
-          <div key={`challenge-${index}`}>
-            <Challenge
-              challenge={challenge}
-              index={index}
-              challenges={challenges}
-              setChallenges={setChallenges}
-            />
-          </div>
+          <>
+            <div className="text-2xl mb-16">Your challenges</div>
+            <div key={`challenge-${index}`}>
+              <Challenge
+                challenge={challenge}
+                index={index}
+                challenges={challenges}
+                setChallenges={setChallenges}
+              />
+            </div>
+          </>
         ))}
-    </div>
+    </>
   )
 }
 
 const Challenges = ({ challenges, setChallenges }) => {
   return (
-    <div>
-      <div className="text-2xl mb-16">Your challenges</div>
-      {challenges && (
-        <ChallengeList challenges={challenges} setChallenges={setChallenges} />
-      )}
-    </div>
+    <>
+      {challenges && challenges.length == 0 && <EmptyState />}
+      <CreateChallengeForm
+        challenges={challenges}
+        setChallenges={setChallenges}
+      />
+      <ChallengeList challenges={challenges} setChallenges={setChallenges} />
+    </>
   )
 }
 
@@ -94,29 +103,10 @@ const fetchLocaleStorage = () => {
 
 const ChallengesWrapper = () => {
   const [challenges, setChallenges] = useState(fetchLocaleStorage())
-  const createChallenge = (event) => {
-    event.preventDefault()
-    const newChallenge = {
-      title: event.target.title.value,
-      description: event.target.description.value,
-      goal: event.target.goal.value,
-      goalDate: event.target.goalDate.value,
-      total: 0,
-      eta: '',
-      events: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-    let updatedChallenges = challenges
-    updatedChallenges.push(newChallenge)
-    setChallenges([...updatedChallenges])
-    localStorage.setItem('challenges', JSON.stringify(challenges))
-  }
 
   return (
-    <div className="container mx-auto pt-24 pb-28">
-      <div className="bg-gray-100 rounded shadow flex justify-center flex-col items-center p-12">
-        <EmptyState createChallenge={createChallenge} />
+    <div className="container mx-auto pt-12 pb-18">
+      <div className="bg-gray-100 rounded shadow flex flex-col p-12">
         <Challenges challenges={challenges} setChallenges={setChallenges} />
       </div>
     </div>

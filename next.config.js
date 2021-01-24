@@ -15,7 +15,6 @@ module.exports = withPWA({
         fs: 'empty',
       }
     }
-
     return config
   },
 })
