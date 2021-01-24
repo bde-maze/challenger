@@ -58,10 +58,10 @@ const Challenge = ({ challenge, index, challenges, setChallenges }) => {
 const ChallengeList = ({ challenges, setChallenges }) => {
   return (
     <>
+      <div className="text-2xl mb-16">Your challenges</div>
       {challenges &&
         challenges.map((challenge, index) => (
           <>
-            <div className="text-2xl mb-16">Your challenges</div>
             <div key={`challenge-${index}`}>
               <Challenge
                 challenge={challenge}
