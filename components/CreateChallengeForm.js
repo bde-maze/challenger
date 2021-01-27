@@ -9,6 +9,7 @@ const CreateChallengeForm = ({ challenges, setChallenges }) => {
       type: 'text',
       name: 'title',
       placeholder: 'Mediation',
+      isRequired: true,
     },
     {
       label: 'Description',
@@ -16,6 +17,7 @@ const CreateChallengeForm = ({ challenges, setChallenges }) => {
       type: 'text',
       name: 'description',
       placeholder: '',
+      isRequired: false,
     },
     {
       label: 'Goal',
@@ -23,6 +25,7 @@ const CreateChallengeForm = ({ challenges, setChallenges }) => {
       type: 'number',
       name: 'goal',
       placeholder: '',
+      isRequired: true,
     },
     {
       label: 'Goal date',
@@ -30,6 +33,7 @@ const CreateChallengeForm = ({ challenges, setChallenges }) => {
       type: 'date',
       name: 'goalDate',
       placeholder: '',
+      isRequired: true,
     },
   ])
 
@@ -89,6 +93,7 @@ const CreateChallengeForm = ({ challenges, setChallenges }) => {
                     className="rounded w-full"
                     type={input.type}
                     name={input.name}
+                    required={input.isRequired}
                     placeholder={input.placeholder}
                     onChange={(event) => {
                       var copy = formContent

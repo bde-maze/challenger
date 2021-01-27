@@ -1,5 +1,4 @@
 import { React, useState } from 'react'
-import EmptyState from '../components/EmptyState.js'
 import CreateChallengeForm from '../components/CreateChallengeForm.js'
 
 const challengeModel = {
@@ -37,9 +36,38 @@ const Challenge = ({ challenge, index, challenges, setChallenges }) => {
     setEventAmount('')
   }
 
+  const countDays = (startDate) => {
+    const oneDay = 24 * 60 * 60 * 1000 // hours*minutes*seconds*milliseconds
+    const result = Math.round(
+      Math.abs((Date.parse(startDate) - new Date()) / oneDay)
+    )
+    return result
+  }
+
+  const estimateEndDate = () => {
+    const currentDays = countDays(challenge.createdAt)
+    const amountPerDay =
+      parseInt(challenge.total) / (currentDays == 0 ? 1 : currentDays)
+    return Math.round(parseInt(challenge.goal) / amountPerDay)
+  }
+
+  const situationnalMessage = () => {
+    if (challenge.total >= challenge.goal)
+      return <div>You completed your goal, congrats!!! 🎉</div>
+    else if (estimateEndDate() > countDays(challenge.goalDate))
+      return <div>Chop chop!!</div>
+    else return <div>You are on schudule, keep going!</div>
+  }
+
   return (
     <div className="flex justify-between">
       <div>{challenge.title}</div>
+      <div>
+        <div>Started {countDays(challenge.createdAt)} days ago</div>
+        <div>Deadline in {countDays(challenge.goalDate)} days</div>
+        <div>Completion estimated in {estimateEndDate()} days</div>
+        {situationnalMessage()}
+      </div>
       <div>
         {challenge.total}/{challenge.goal} (
         {((challenge.total / challenge.goal) * 100).toFixed(2)}%)
@@ -79,7 +107,13 @@ const ChallengeList = ({ challenges, setChallenges }) => {
 const Challenges = ({ challenges, setChallenges }) => {
   return (
     <>
-      {challenges && challenges.length == 0 && <EmptyState />}
+      {challenges && challenges.length == 0 && (
+        <div className="text-2xl mb-16">
+          You have no challenges
+          <br />
+          create the first one now!
+        </div>
+      )}
       <CreateChallengeForm
         challenges={challenges}
         setChallenges={setChallenges}
