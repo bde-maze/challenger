@@ -12,19 +12,19 @@ const CreateChallengeForm = ({ challenges, setChallenges }) => {
       isRequired: true,
     },
     {
-      label: 'Description',
+      label: 'Unit (reps / mins / days...)',
       value: '',
       type: 'text',
-      name: 'description',
-      placeholder: '',
-      isRequired: false,
+      name: 'unit',
+      placeholder: 'minutes',
+      isRequired: true,
     },
     {
       label: 'Goal',
       value: 0,
       type: 'number',
       name: 'goal',
-      placeholder: '',
+      placeholder: '4200',
       isRequired: true,
     },
     {
@@ -41,7 +41,7 @@ const CreateChallengeForm = ({ challenges, setChallenges }) => {
     event.preventDefault()
     const newChallenge = {
       title: event.target.title.value,
-      description: event.target.description.value,
+      unit: event.target.unit.value,
       goal: event.target.goal.value,
       goalDate: event.target.goalDate.value,
       total: 0,
@@ -58,9 +58,9 @@ const CreateChallengeForm = ({ challenges, setChallenges }) => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center mb-12">
+      <div className="flex flex-col justify-end items-center">
         <div
-          className={`py-2 px-3 rounded cursor-pointer bg-indigo-600 text-white ${
+          className={`py-2 self-end px-3 rounded cursor-pointer bg-indigo-600 text-white ${
             formVisible ? `hidden` : `block`
           }`}
           onClick={() => {
@@ -79,31 +79,33 @@ const CreateChallengeForm = ({ challenges, setChallenges }) => {
         >
           X
         </div>
-        <div className={formVisible ? `block` : `hidden`}>
+        <div className={`w-full ${formVisible ? `block` : `hidden`}`}>
           <form
             className="mb-12 w-full"
             onSubmit={(event) => createChallenge(event)}
           >
-            {formContent.map((input, index) => (
-              <div className="mb-6">
-                <label>
-                  <div>{input.label}</div>
-                  <input
-                    key={`input-${index}`}
-                    className="rounded w-full"
-                    type={input.type}
-                    name={input.name}
-                    required={input.isRequired}
-                    placeholder={input.placeholder}
-                    onChange={(event) => {
-                      var copy = formContent
-                      copy[index].value = event.target.value
-                      setFormContent([...copy])
-                    }}
-                  />
-                </label>
-              </div>
-            ))}
+            <div className="flex flex-wrap">
+              {formContent.map((input, index) => (
+                <div className="mb-6 pr-6 w-1/2">
+                  <label>
+                    <div>{input.label}</div>
+                    <input
+                      key={`input-${index}`}
+                      className="rounded w-full"
+                      type={input.type}
+                      name={input.name}
+                      required={input.isRequired}
+                      placeholder={input.placeholder}
+                      onChange={(event) => {
+                        var copy = formContent
+                        copy[index].value = event.target.value
+                        setFormContent([...copy])
+                      }}
+                    />
+                  </label>
+                </div>
+              ))}
+            </div>
             <input
               type="submit"
               value="create"

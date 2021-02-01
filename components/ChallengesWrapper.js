@@ -60,8 +60,8 @@ const Challenge = ({ challenge, index, challenges, setChallenges }) => {
   }
 
   return (
-    <div className="flex justify-between">
-      <div>{challenge.title}</div>
+    <div className="flex justify-between bg-indigo-600 rounded shadow mb-6 p-6 text-white">
+      <div className="w-1/5">{challenge.title}</div>
       <div>
         <div>Started {countDays(challenge.createdAt)} days ago</div>
         <div>Deadline in {countDays(challenge.goalDate)} days</div>
@@ -69,7 +69,7 @@ const Challenge = ({ challenge, index, challenges, setChallenges }) => {
         {situationnalMessage()}
       </div>
       <div>
-        {challenge.total}/{challenge.goal} (
+        {challenge.total}/{challenge.goal} {challenge.unit} (
         {((challenge.total / challenge.goal) * 100).toFixed(2)}%)
       </div>
       <form onSubmit={(e) => onSubmit(e)}>
