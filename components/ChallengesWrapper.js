@@ -15,7 +15,7 @@ const challengeModel = {
 const updateChallenge = ({ challenges, setChallenges, index }) => {}
 
 const Challenge = ({ challenge, index, challenges, setChallenges }) => {
-  const [eventAmount, setEventAmount] = useState()
+  const [eventAmount, setEventAmount] = useState(0)
 
   const onSubmit = (event) => {
     event.preventDefault()
@@ -33,7 +33,7 @@ const Challenge = ({ challenge, index, challenges, setChallenges }) => {
 
     setChallenges([...challenges])
     localStorage.setItem('challenges', JSON.stringify(challenges))
-    setEventAmount('')
+    setEventAmount(0)
   }
 
   const countDays = (startDate) => {
@@ -51,21 +51,38 @@ const Challenge = ({ challenge, index, challenges, setChallenges }) => {
     return Math.round(parseInt(challenge.goal) / amountPerDay)
   }
 
+  const isCompleted = () => challenge.total >= challenge.goal
+
   const situationnalMessage = () => {
-    if (challenge.total >= challenge.goal)
-      return <div>You completed your goal, congrats!!! 🎉</div>
-    else if (estimateEndDate() > countDays(challenge.goalDate))
-      return <div>Chop chop!!</div>
-    else return <div>You are on schudule, keep going!</div>
+    switch (isCompleted()) {
+      case true:
+        return <div>You completed your goal, congrats!!! 🎉</div>
+      default:
+        let tempo
+        if (estimateEndDate() > countDays(challenge.goalDate))
+          tempo = <div>Chop chop!!</div>
+        else tempo = <div>You are on schedule, keep going!</div>
+
+        return (
+          <div>
+            <div>Deadline in {countDays(challenge.goalDate)} days</div>
+            <div>Completion estimated in {estimateEndDate()} days</div>
+            {tempo}
+          </div>
+        )
+    }
   }
 
   return (
-    <div className="flex justify-between bg-indigo-600 rounded shadow mb-6 p-6 text-white">
+    <div
+      className={`flex justify-between ${
+        isCompleted() ? 'bg-green-600' : 'bg-indigo-600'
+      } rounded shadow mb-6 p-6 text-white`}
+    >
       <div className="w-1/5">{challenge.title}</div>
       <div>
         <div>Started {countDays(challenge.createdAt)} days ago</div>
-        <div>Deadline in {countDays(challenge.goalDate)} days</div>
-        <div>Completion estimated in {estimateEndDate()} days</div>
+
         {situationnalMessage()}
       </div>
       <div>
@@ -76,7 +93,13 @@ const Challenge = ({ challenge, index, challenges, setChallenges }) => {
         <input
           type="number"
           value={eventAmount}
+          className="text-indigo-700"
           onChange={(event) => setEventAmount(event.target.value)}
+        />
+        <input
+          type="submit"
+          value="add"
+          className="ml-4 px-2 rounded-sm cursor-pointer text-indigo-700 shadow"
         />
       </form>
     </div>
